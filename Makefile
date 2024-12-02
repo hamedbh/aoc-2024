@@ -1,4 +1,4 @@
-.PHONY: all inputs clean lint format requirements environment test help
+.PHONY: all all_answers inputs clean lint format requirements environment test help
 
 PROJECT_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 
@@ -8,6 +8,16 @@ PROJECT_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 
 inputs:
 	./get_inputs
+
+SOURCE_DATA_FILES=$(wildcard data/day_*.txt)
+ANSWER_FILES=$(patsubst data/day_%.txt,answers/day_%.txt,$(SOURCE_DATA_FILES))
+all_answer_files: $(ANSWER_FILES)
+
+answers/day_%.txt: aoc2024/day_%.py data/day_%.txt
+	uv run python3 -m aoc2024.day_$* > $@
+
+README.md: readme_stub.md $(ANSWER_FILES)
+	cat $^ > $@
 
 ## Delete all compiled Python files
 clean:

@@ -92,6 +92,5 @@ scratch.py
 # Mypy cache
 .mypy_cache/
 
-# Version file screated by setuptools-scm
-lightopic/_version.py
 data
+answers
