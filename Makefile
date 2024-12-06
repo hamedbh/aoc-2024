@@ -1,4 +1,4 @@
-.PHONY: all all_answers inputs clean lint format requirements environment test help
+.PHONY: all all_answer_files update clean lint format requirements environment test help
 
 PROJECT_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 
@@ -6,8 +6,8 @@ PROJECT_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 # COMMANDS                                                                    #
 ###############################################################################
 
-inputs:
-	./get_inputs
+update:
+	./update_aoc
 
 SOURCE_DATA_FILES=$(wildcard data/day_*.txt)
 ANSWER_FILES=$(patsubst data/day_%.txt,answers/day_%.txt,$(SOURCE_DATA_FILES))
@@ -16,8 +16,12 @@ all_answer_files: $(ANSWER_FILES)
 answers/day_%.txt: aoc2024/day_%.py data/day_%.txt
 	uv run python3 -m aoc2024.day_$* > $@
 
-README.md: readme_stub.md $(ANSWER_FILES)
-	cat $^ > $@
+README.md: $(ANSWER_FILES)
+	echo "# Advent of Code 2024" > $@
+	echo "" >> $@
+	echo "I'm trying this in Python for the first time. Usually I get distracted by life at some point, let's see how far I get this year." >> $@
+	echo "" >> $@
+	cat $^ >> $@
 
 ## Delete all compiled Python files
 clean:

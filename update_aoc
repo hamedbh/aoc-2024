@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+
+# Script to get the Advent of Code input files and create associated
+# Python scripts.
+# Usage: ./update_aoc
+source .env
+mkdir -p data
+current_date=$(date +%Y-%m-%d)
+if [[ "${current_date}" > '2024-12-31' ]]
+then
+    current_date='2024-12-31'
+fi
+current_day=${current_date:8:2}
+for day in $(seq -w 01 ${current_day}); do
+    day_no_zeros=$(echo ${day} | sed 's/^0*//')
+    puzzle_file="data/day_${day}.txt"
+    if [[ -f "${puzzle_file}" ]]
+    then
+        echo "File ${puzzle_file} already exists."
+    else
+        curl "https://adventofcode.com/2024/day/${day_no_zeros}/input" \
+        -H "cookie: session=${AOC_SESSION_COOKIE}" \
+        -o "${puzzle_file}"
+    fi
+    python_file="aoc2024/day_${day}.py"
+    if [[ -f "${python_file}" ]]
+    then
+        echo "File ${python_file} already exists."
+    else
+        touch "${python_file}"
+        echo "from aoc2024 import utils" > "${python_file}"
+        echo "" >> "${python_file}"
+        echo "with open(\"data/day_${day}.txt\", \"r\") as f:" >> "${python_file}"
+        echo '    input = f.read()' >> "${python_file}"
+        echo "" >> "${python_file}"
+        echo 'answer1 = ""' >> "${python_file}"
+        echo "" >> "${python_file}"
+        echo 'answer2 = ""' >> "${python_file}"
+        echo "" >> "${python_file}"
+        echo "utils.print_day(${day_no_zeros}, answer1, answer2)" >> "${python_file}"
+    fi
+done
