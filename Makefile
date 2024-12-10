@@ -6,6 +6,7 @@ PROJECT_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 # COMMANDS                                                                    #
 ###############################################################################
 
+## Update the data inputs and Python scripts
 update:
 	./update_aoc
 
@@ -16,6 +17,7 @@ all_answer_files: $(ANSWER_FILES)
 answers/day_%.txt: aoc2024/day_%.py data/day_%.txt
 	uv run python3 -m aoc2024.day_$* > $@
 
+## Build the answers into the README
 README.md: $(ANSWER_FILES)
 	echo "# Advent of Code 2024" > $@
 	echo "" >> $@
