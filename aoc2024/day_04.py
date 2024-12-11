@@ -3,7 +3,6 @@ from aoc2024 import utils
 with open("data/day_04.txt", "r") as f:
     square = [line.strip() for line in f.readlines()]
 
-# square = ["abcde", "fghij", "klmno", "pqrst", "uvwxy"]
 transposed = ["".join([row[i] for row in square]) for i in range(len(square))]
 
 
